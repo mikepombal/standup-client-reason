@@ -24,11 +24,7 @@ let make = () => {
            {ReasonReact.array(
               Array.map(
                 item =>
-                  <Person
-                    key={item##username}
-                    username={item##username}
-                    firstname={item##firstname}
-                  />,
+                  <Person key={item##username} firstname={item##firstname} />,
                 d##getLastUpdate,
               ),
             )}
