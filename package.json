@@ -9,7 +9,8 @@
     "webpack": "webpack -w",
     "webpack:production": "NODE_ENV=production webpack",
     "server": "webpack-dev-server",
-    "get-schema": "node_modules/.bin/send-introspection-query https://standup-server.herokuapp.com/"
+    "get-schema": "node_modules/.bin/send-introspection-query https://standup-server.herokuapp.com/",
+    "now": "now --name standup-client-reason deploy ./public"
   },
   "keywords": [
     "BuckleScript"
@@ -28,6 +29,7 @@
   "devDependencies": {
     "bs-platform": "^5.0.6",
     "html-webpack-plugin": "^3.2.0",
+    "now": "^16.4.4",
     "webpack": "^4.0.1",
     "webpack-cli": "^3.1.1",
     "webpack-dev-server": "^3.1.8"
