@@ -11,9 +11,24 @@ module LastUpdateQueryConfig = [%graphql
 
 module LastUpdate = ReasonApolloHooks.Query.Make(LastUpdateQueryConfig);
 
+type action =
+  | TogglePerson(string);
+
 [@react.component]
 let make = () => {
   let (_, full) = LastUpdate.use();
+  let (listSelected, dispatch) =
+    React.useReducer(
+      (l, action) =>
+        switch (action) {
+        | TogglePerson(person) =>
+          switch (List.find(str => str === person, l)) {
+          | exception Not_found => [person, ...l]
+          | _ => List.filter(str => str !== person, l)
+          }
+        },
+      [],
+    );
   <div>
     {switch (full) {
      | {loading: true} => <p> {ReasonReact.string("Loading")} </p>
@@ -27,7 +42,15 @@ let make = () => {
                   <Person
                     key={item##username}
                     firstname={item##firstname}
-                    checked=false
+                    checked={
+                      switch (
+                        List.find(str => str === item##username, listSelected)
+                      ) {
+                      | exception Not_found => false
+                      | _ => true
+                      }
+                    }
+                    toggle={_evt => dispatch(TogglePerson(item##username))}
                   />,
                 d##getLastUpdate,
               ),
