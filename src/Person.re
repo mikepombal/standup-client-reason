@@ -1,2 +1,6 @@
 [@react.component]
-let make = (~firstname) => <li> {ReasonReact.string(firstname)} </li>;
+let make = (~firstname, ~checked) =>
+  <li>
+    <input type_="checkbox" checked />
+    {ReasonReact.string(firstname)}
+  </li>;
