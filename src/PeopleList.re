@@ -35,27 +35,43 @@ let make = () => {
      | {data} =>
        switch (data) {
        | Some(d) =>
-         <ul>
-           {ReasonReact.array(
-              Array.map(
-                item =>
-                  <Person
-                    key={item##username}
-                    firstname={item##firstname}
-                    checked={
-                      switch (
-                        List.find(str => str === item##username, listSelected)
-                      ) {
-                      | exception Not_found => false
-                      | _ => true
+         <>
+           <ul>
+             {ReasonReact.array(
+                Array.map(
+                  item =>
+                    <Person
+                      key={item##username}
+                      firstname={item##firstname}
+                      checked={
+                        switch (
+                          List.find(
+                            str => str === item##username,
+                            listSelected,
+                          )
+                        ) {
+                        | exception Not_found => false
+                        | _ => true
+                        }
                       }
-                    }
-                    toggle={_evt => dispatch(TogglePerson(item##username))}
-                  />,
-                d##getLastUpdate,
-              ),
-            )}
-         </ul>
+                      toggle={_evt => dispatch(TogglePerson(item##username))}
+                    />,
+                  d##getLastUpdate,
+                ),
+              )}
+           </ul>
+           <code>
+             {ReasonReact.array(
+                Array.of_list(
+                  List.map(
+                    username =>
+                      ReasonReact.string("\"" ++ username ++ "\", "),
+                    listSelected,
+                  ),
+                ),
+              )}
+           </code>
+         </>
        | None => <p> {ReasonReact.string("No Data")} </p>
        }
      }}
