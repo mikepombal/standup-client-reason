@@ -10,7 +10,7 @@
     "webpack:production": "NODE_ENV=production webpack",
     "server": "webpack-dev-server",
     "get-schema": "node_modules/.bin/send-introspection-query https://standup-server.herokuapp.com/",
-    "now": "now --name standup-client-reason deploy ./public"
+    "now": "now --name standup-client-reason deploy ./build"
   },
   "keywords": [
     "BuckleScript"

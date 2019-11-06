@@ -3,7 +3,7 @@
 .bsb.lock
 npm-debug.log
 /.graphql_ppx_cache/
-/public/
+/build/
 /lib/bs/
 /node_modules/
 /src/*.bs.js
