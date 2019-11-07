@@ -17,6 +17,7 @@ type action =
 [@react.component]
 let make = () => {
   let (_, full) = LastUpdate.use();
+  let (date, setDate) = React.useState(() => Helpers.getCurrentDateString());
   let (listSelected, dispatch) =
     React.useReducer(
       (l, action) =>
@@ -60,6 +61,11 @@ let make = () => {
                 ),
               )}
            </ul>
+           <input
+             type_="date"
+             value=date
+             onChange={evt => setDate(ReactEvent.Form.target(evt)##value)}
+           />
            <code>
              {ReasonReact.array(
                 Array.of_list(
