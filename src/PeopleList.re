@@ -96,8 +96,10 @@ let make = () => {
              value=date
              onChange={evt => setDate(ReactEvent.Form.target(evt)##value)}
            />
-           <button onClick={_evt => onSubmit()}>
-             {ReasonReact.string("Save")}
+           <button
+             onClick={_evt => onSubmit()}
+             disabled={List.length(listSelected) == 0}>
+             {ReasonReact.string("Add Updates")}
            </button>
            <code>
              {ReasonReact.array(
