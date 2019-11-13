@@ -9,7 +9,16 @@ module LastUpdateQueryConfig = [%graphql
 |}
 ];
 
+module AddUpdatesMutationConfig = [%graphql
+  {|
+    mutation addUpdates($date: String!, $people: [String!]!) {
+        addUpdates(date: $date, usrnames: $people)
+    }
+|}
+];
+
 module LastUpdate = ReasonApolloHooks.Query.Make(LastUpdateQueryConfig);
+module AddUpdates = ReasonApolloHooks.Mutation.Make(AddUpdatesMutationConfig);
 
 type action =
   | TogglePerson(string);
@@ -17,6 +26,7 @@ type action =
 [@react.component]
 let make = () => {
   let (_, full) = LastUpdate.use();
+  let (addUpdates, _, _) = AddUpdates.use();
   let (date, setDate) = React.useState(() => Helpers.getCurrentDateString());
   let (listSelected, dispatch) =
     React.useReducer(
@@ -30,6 +40,26 @@ let make = () => {
         },
       [],
     );
+  let onSubmit = () => {
+    let variables =
+      AddUpdatesMutationConfig.make(
+        ~date,
+        ~people=Array.of_list(listSelected),
+        (),
+      )##variables;
+    addUpdates(~variables, ())
+    |> Js.Promise.then_(
+         (
+           res:
+             ReasonApolloHooks.Mutation.controlledVariantResult(
+               AddUpdatesMutationConfig.t,
+             ),
+         ) => {
+         Js.log(res);
+         Js.Promise.resolve();
+       })
+    |> ignore;
+  };
   <div>
     {switch (full) {
      | {loading: true} => <p> {ReasonReact.string("Loading")} </p>
@@ -66,6 +96,9 @@ let make = () => {
              value=date
              onChange={evt => setDate(ReactEvent.Form.target(evt)##value)}
            />
+           <button onClick={_evt => onSubmit()}>
+             {ReasonReact.string("Save")}
+           </button>
            <code>
              {ReasonReact.array(
                 Array.of_list(
