@@ -4,6 +4,7 @@ module LastUpdateQueryConfig = [%graphql
     getLastUpdate {
       username,
       firstname,
+      lastUpdate,
     }
   }
 |}
@@ -74,6 +75,7 @@ let make = () => {
                     <Person
                       key={item##username}
                       firstname={item##firstname}
+                      lastUpdate={item##lastUpdate}
                       checked={
                         switch (
                           List.find(
