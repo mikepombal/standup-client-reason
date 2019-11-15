@@ -24,28 +24,36 @@ module AddUpdates = ReasonApolloHooks.Mutation.Make(AddUpdatesMutationConfig);
 type action =
   | TogglePerson(string);
 
+type state = {listSelected: list(string)};
+let initialState = {listSelected: []};
+
 [@react.component]
 let make = () => {
   let (_, full) = LastUpdate.use();
   let (addUpdates, _, _) = AddUpdates.use();
   let (date, setDate) = React.useState(() => Helpers.getCurrentDateString());
-  let (listSelected, dispatch) =
+  let (state, dispatch) =
     React.useReducer(
-      (l, action) =>
+      (state, action) =>
         switch (action) {
         | TogglePerson(person) =>
-          switch (List.find(str => str === person, l)) {
-          | exception Not_found => [person, ...l]
-          | _ => List.filter(str => str !== person, l)
+          switch (List.find(str => str === person, state.listSelected)) {
+          | exception Not_found => {
+              listSelected: [person, ...state.listSelected],
+            }
+          | _ => {
+              listSelected:
+                List.filter(str => str !== person, state.listSelected),
+            }
           }
         },
-      [],
+      initialState,
     );
   let onSubmit = () => {
     let variables =
       AddUpdatesMutationConfig.make(
         ~date,
-        ~people=Array.of_list(listSelected),
+        ~people=Array.of_list(state.listSelected),
         (),
       )##variables;
     addUpdates(~variables, ())
@@ -80,7 +88,7 @@ let make = () => {
                         switch (
                           List.find(
                             str => str === item##username,
-                            listSelected,
+                            state.listSelected,
                           )
                         ) {
                         | exception Not_found => false
@@ -100,7 +108,7 @@ let make = () => {
            />
            <button
              onClick={_evt => onSubmit()}
-             disabled={List.length(listSelected) == 0}>
+             disabled={List.length(state.listSelected) == 0}>
              {ReasonReact.string("Add Updates")}
            </button>
            <code>
@@ -109,7 +117,7 @@ let make = () => {
                   List.map(
                     username =>
                       ReasonReact.string("\"" ++ username ++ "\", "),
-                    listSelected,
+                    state.listSelected,
                   ),
                 ),
               )}
