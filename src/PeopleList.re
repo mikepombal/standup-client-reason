@@ -130,17 +130,6 @@ let make = () => {
              disabled={List.length(state.listSelected) == 0}>
              {ReasonReact.string("Add Updates")}
            </button>
-           <code>
-             {ReasonReact.array(
-                Array.of_list(
-                  List.map(
-                    username =>
-                      ReasonReact.string("\"" ++ username ++ "\", "),
-                    state.listSelected,
-                  ),
-                ),
-              )}
-           </code>
          </>
        | None => <p> {ReasonReact.string("No Data")} </p>
        }
