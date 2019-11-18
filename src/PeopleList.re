@@ -35,7 +35,15 @@ let initialState = {date: Helpers.getCurrentDateString(), listSelected: []};
 [@react.component]
 let make = () => {
   let (_, full) = LastUpdate.use();
-  let (addUpdates, _, _) = AddUpdates.use();
+  let (addUpdates, _, _) =
+    AddUpdates.use(
+      ~refetchQueries=
+        _ => {
+          let query = LastUpdateQueryConfig.make();
+          [|ReasonApolloHooks.Utils.toQueryObj(query)|];
+        },
+      (),
+    );
   let (state, dispatch) =
     React.useReducer(
       (state, action) =>
