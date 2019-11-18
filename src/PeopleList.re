@@ -23,6 +23,7 @@ module AddUpdates = ReasonApolloHooks.Mutation.Make(AddUpdatesMutationConfig);
 
 type action =
   | TogglePerson(string)
+  | ClearChecks
   | SetDate(string);
 
 type state = {
@@ -52,6 +53,7 @@ let make = () => {
             }
           }
         | SetDate(date) => {...state, date}
+        | ClearChecks => {...state, listSelected: []}
         },
       initialState,
     );
@@ -71,6 +73,7 @@ let make = () => {
              ),
          ) => {
          Js.log(res);
+         dispatch(ClearChecks);
          Js.Promise.resolve();
        })
     |> ignore;
