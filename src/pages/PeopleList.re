@@ -32,6 +32,43 @@ type state = {
 };
 let initialState = {date: Helpers.getCurrentDateString(), listSelected: []};
 
+module Classes = {
+  open DesignSystem;
+
+  let container = () =>
+    Css.(
+      style([
+        display(`flex),
+        maxWidth(`px(800)),
+        margin2(~v=px(0), ~h=`auto),
+        paddingTop(`px(20)),
+      ])
+    );
+  let list = () =>
+    Css.(style([flexGrow(2.0), display(`flex), flexDirection(`column)]));
+  let time = () =>
+    Css.(
+      style([
+        flexGrow(0.0),
+        display(`flex),
+        flexDirection(`column),
+        height(`px(150)),
+        justifyContent(`spaceAround),
+        marginTop(`px(100)),
+      ])
+    );
+  let button = () =>
+    Css.(
+      style([
+        height(`px(50)),
+        color(`BodyText |> Styles.useColor),
+        backgroundColor(Styles.color(`Primary, Dark)),
+        borderColor(Styles.color(`Primary, Dark)),
+        borderRadius(`px(5)),
+      ])
+    );
+};
+
 [@react.component]
 let make = () => {
   let (_, full) = LastUpdate.use();
@@ -92,8 +129,8 @@ let make = () => {
      | {data} =>
        switch (data) {
        | Some(d) =>
-         <>
-           <ul>
+         <div className={Classes.container()}>
+           <ul className={Classes.list()}>
              {ReasonReact.array(
                 Array.map(
                   item =>
@@ -118,19 +155,22 @@ let make = () => {
                 ),
               )}
            </ul>
-           <input
-             type_="date"
-             value={state.date}
-             onChange={evt =>
-               dispatch(SetDate(ReactEvent.Form.target(evt)##value))
-             }
-           />
-           <button
-             onClick={_evt => onSubmit()}
-             disabled={List.length(state.listSelected) == 0}>
-             {ReasonReact.string("Add Updates")}
-           </button>
-         </>
+           <div className={Classes.time()}>
+             <input
+               type_="date"
+               value={state.date}
+               onChange={evt =>
+                 dispatch(SetDate(ReactEvent.Form.target(evt)##value))
+               }
+             />
+             <button
+               className={Classes.button()}
+               onClick={_evt => onSubmit()}
+               disabled={List.length(state.listSelected) == 0}>
+               {ReasonReact.string("Add Updates")}
+             </button>
+           </div>
+         </div>
        | None => <p> {ReasonReact.string("No Data")} </p>
        }
      }}
