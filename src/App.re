@@ -22,6 +22,7 @@ let make = () => {
   DesignSystem.Styles.useToggleBodyTheme();
 
   <ThemeContext.Provider value=(theme, toggleTheme)>
+    <Header />
     {isLogin ? <PeopleList /> : <Login setLogin />}
   </ThemeContext.Provider>;
 };
