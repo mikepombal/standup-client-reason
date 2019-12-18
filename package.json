@@ -19,6 +19,8 @@
   "license": "MIT",
   "dependencies": {
     "@apollo/react-hooks": "^3.1.2",
+    "bs-css": "^11.0.0",
+    "bs-webapi": "^0.15.6",
     "graphql_ppx": "^0.2.8",
     "react": "^16.8.1",
     "react-dom": "^16.8.1",

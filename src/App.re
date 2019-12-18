@@ -9,5 +9,19 @@ let make = () => {
       | None => false
       };
     });
-  isLogin ? <PeopleList /> : <Login setLogin />;
+  let (theme, setTheme) = React.useState(() => ThemeContext.Dark);
+  let toggleTheme = () =>
+    setTheme(current =>
+      switch (current) {
+      | Light => Dark
+      | Dark => Light
+      }
+    );
+
+  GlobalCss.injectGlobal();
+  DesignSystem.Styles.useToggleBodyTheme();
+
+  <ThemeContext.Provider value=(theme, toggleTheme)>
+    {isLogin ? <PeopleList /> : <Login setLogin />}
+  </ThemeContext.Provider>;
 };
