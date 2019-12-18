@@ -1,4 +1,6 @@
 /* Create an InMemoryCache */
+[%bs.raw {|require("./reset.css")|}];
+
 let inMemoryCache = ApolloInMemoryCache.createInMemoryCache();
 
 let authLink = {

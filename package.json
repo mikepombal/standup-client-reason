@@ -21,12 +21,14 @@
     "@apollo/react-hooks": "^3.1.2",
     "bs-css": "^11.0.0",
     "bs-webapi": "^0.15.6",
+    "css-loader": "^3.4.0",
     "graphql_ppx": "^0.2.8",
     "react": "^16.8.1",
     "react-dom": "^16.8.1",
     "reason-apollo": "^0.17.0",
     "reason-apollo-hooks": "^2.7.0",
-    "reason-react": ">=0.7.0"
+    "reason-react": ">=0.7.0",
+    "style-loader": "^1.0.2"
   },
   "devDependencies": {
     "bs-platform": "^5.0.6",
