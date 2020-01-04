@@ -19,7 +19,16 @@ module LoginQuery = [%graphql
 |}
 ];
 
+module GithubLoginUrlQuery = [%graphql
+  {|
+  query GithubLoginUrl {
+    githubLoginUrl
+  }
+|}
+];
+
 module LoginMutation = ReasonApolloHooks.Mutation.Make(LoginQuery);
+module GithubLoginUrl = ReasonApolloHooks.Query.Make(GithubLoginUrlQuery);
 
 type state = {
   username: string,
@@ -67,6 +76,7 @@ module Classes = {
 [@react.component]
 let make = (~setLogin) => {
   let (login, _, _) = LoginMutation.use();
+  let (simple, _full) = GithubLoginUrl.use();
   let (state, dispatch) =
     React.useReducer(
       (state, action) =>
@@ -107,8 +117,6 @@ let make = (~setLogin) => {
     |> ignore;
   };
 
-  Js.log(src);
-
   // <p>
   //   <input
   //     placeholder="Username"
@@ -130,12 +138,23 @@ let make = (~setLogin) => {
   //   </button>
   // </p>;
   <div className={Classes.mainContainer()}>
-    <div className={Classes.loginContainer()}>
-      {ReasonReact.string("Please login using your GitHub account")}
-      <button className={Classes.button()}>
-        {ReasonReact.string("Sign In With GitHub")}
-        <img className={Classes.githubImage()} src height="40" width="40" />
-      </button>
-    </div>
+    {switch (simple) {
+     | Data(data) =>
+       <div className={Classes.loginContainer()} action={data##githubLoginUrl}>
+         {ReasonReact.string("Please login using your GitHub account")}
+         <a href={data##githubLoginUrl}>
+           <button className={Classes.button()}>
+             {ReasonReact.string("Sign In With GitHub")}
+             <img
+               className={Classes.githubImage()}
+               src
+               height="40"
+               width="40"
+             />
+           </button>
+         </a>
+       </div>
+     | _ => ReasonReact.string("Loading...")
+     }}
   </div>;
 };
