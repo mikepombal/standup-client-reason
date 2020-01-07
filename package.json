@@ -10,7 +10,9 @@
     "webpack:production": "NODE_ENV=production webpack",
     "server": "webpack-dev-server",
     "get-schema": "node_modules/.bin/send-introspection-query https://standup-server.herokuapp.com/",
-    "now": "now --name standup-client-reason deploy ./build"
+    "now": "now --name standup-client-reason deploy ./build",
+    "dedupe:react": "npm dedupe reason-react --no-package-lock",
+    "update-deps": "rm -rf node_modules/reason-apollo-hooks && npm install --check-files && npm run dedupe:react"
   },
   "keywords": [
     "BuckleScript"
