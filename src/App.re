@@ -1,6 +1,6 @@
 [@react.component]
 let make = () => {
-  let (isLogin, setLogin) =
+  let (isLogin, _setLogin) =
     React.useState(() => {
       let token = Storage.getTokenFromStorage();
 
@@ -23,6 +23,6 @@ let make = () => {
 
   <ThemeContext.Provider value=(theme, toggleTheme)>
     <Header />
-    {isLogin ? <PeopleList /> : <Login setLogin />}
+    {isLogin ? <PeopleList /> : <Login />}
   </ThemeContext.Provider>;
 };

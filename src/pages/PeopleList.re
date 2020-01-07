@@ -18,8 +18,8 @@ module AddUpdatesMutationConfig = [%graphql
 |}
 ];
 
-module LastUpdate = ReasonApolloHooks.Query.Make(LastUpdateQueryConfig);
-module AddUpdates = ReasonApolloHooks.Mutation.Make(AddUpdatesMutationConfig);
+// module LastUpdate = ReasonApolloHooks.Query.Make(LastUpdateQueryConfig);
+// module AddUpdates = ReasonApolloHooks.Mutation.Make(AddUpdatesMutationConfig);
 
 type action =
   | TogglePerson(string)
@@ -71,16 +71,16 @@ module Classes = {
 
 [@react.component]
 let make = () => {
-  let (_, full) = LastUpdate.use();
-  let (addUpdates, _, _) =
-    AddUpdates.use(
-      ~refetchQueries=
-        _ => {
-          let query = LastUpdateQueryConfig.make();
-          [|ReasonApolloHooks.Utils.toQueryObj(query)|];
-        },
-      (),
-    );
+  // let (_, full) = LastUpdate.use();
+  // let (addUpdates, _, _) =
+  //   AddUpdates.use(
+  //     ~refetchQueries=
+  //       _ => {
+  //         let query = LastUpdateQueryConfig.make();
+  //         [|ReasonApolloHooks.Utils.toQueryObj(query)|];
+  //       },
+  //     (),
+  //   );
   let (state, dispatch) =
     React.useReducer(
       (state, action) =>
@@ -102,77 +102,77 @@ let make = () => {
         },
       initialState,
     );
-  let onSubmit = () => {
-    let variables =
-      AddUpdatesMutationConfig.make(
-        ~date=state.date,
-        ~people=Array.of_list(state.listSelected),
-        (),
-      )##variables;
-    addUpdates(~variables, ())
-    |> Js.Promise.then_(
-         (
-           res:
-             ReasonApolloHooks.Mutation.controlledVariantResult(
-               AddUpdatesMutationConfig.t,
-             ),
-         ) => {
-         Js.log(res);
-         dispatch(ClearChecks);
-         Js.Promise.resolve();
-       })
-    |> ignore;
-  };
-  <div>
-    {switch (full) {
-     | {loading: true} => <p> {ReasonReact.string("Loading")} </p>
-     | {data} =>
-       switch (data) {
-       | Some(d) =>
-         <div className={Classes.container()}>
-           <ul className={Classes.list()}>
-             {ReasonReact.array(
-                Array.map(
-                  item =>
-                    <Person
-                      key={item##username}
-                      firstname={item##firstname}
-                      lastUpdate={item##lastUpdate}
-                      checked={
-                        switch (
-                          List.find(
-                            str => str === item##username,
-                            state.listSelected,
-                          )
-                        ) {
-                        | exception Not_found => false
-                        | _ => true
-                        }
-                      }
-                      toggle={_evt => dispatch(TogglePerson(item##username))}
-                    />,
-                  d##getLastUpdate,
-                ),
-              )}
-           </ul>
-           <div className={Classes.time()}>
-             <input
-               type_="date"
-               value={state.date}
-               onChange={evt =>
-                 dispatch(SetDate(ReactEvent.Form.target(evt)##value))
-               }
-             />
-             <button
-               className={Classes.button()}
-               onClick={_evt => onSubmit()}
-               disabled={List.length(state.listSelected) == 0}>
-               {ReasonReact.string("Add Updates")}
-             </button>
-           </div>
-         </div>
-       | None => <p> {ReasonReact.string("No Data")} </p>
-       }
-     }}
-  </div>;
+  <div
+    // let onSubmit = () => {
+    //   let variables =
+    //     AddUpdatesMutationConfig.make(
+    //       ~date=state.date,
+    //       ~people=Array.of_list(state.listSelected),
+    //       (),
+    //     )##variables;
+    //   addUpdates(~variables, ())
+    //   |> Js.Promise.then_(
+    //        (
+    //          res:
+    //            ReasonApolloHooks.Mutation.controlledVariantResult(
+    //              AddUpdatesMutationConfig.t,
+    //            ),
+    //        ) => {
+    //        Js.log(res);
+    //        dispatch(ClearChecks);
+    //        Js.Promise.resolve();
+    //      })
+    //   |> ignore;
+    // };
+    // {switch (full) {
+    //  | {loading: true} => <p> {ReasonReact.string("Loading")} </p>
+    //  | {data} =>
+    //    switch (data) {
+    //    | Some(d) =>
+    //      <div className={Classes.container()}>
+    //        <ul className={Classes.list()}>
+    //          {ReasonReact.array(
+    //             Array.map(
+    //               item =>
+    //                 <Person
+    //                   key={item##username}
+    //                   firstname={item##firstname}
+    //                   lastUpdate={item##lastUpdate}
+    //                   checked={
+    //                     switch (
+    //                       List.find(
+    //                         str => str === item##username,
+    //                         state.listSelected,
+    //                       )
+    //                     ) {
+    //                     | exception Not_found => false
+    //                     | _ => true
+    //                     }
+    //                   }
+    //                   toggle={_evt => dispatch(TogglePerson(item##username))}
+    //                 />,
+    //               d##getLastUpdate,
+    //             ),
+    //           )}
+    //        </ul>
+    //        <div className={Classes.time()}>
+    //          <input
+    //            type_="date"
+    //            value={state.date}
+    //            onChange={evt =>
+    //              dispatch(SetDate(ReactEvent.Form.target(evt)##value))
+    //            }
+    //          />
+    //          <button
+    //            className={Classes.button()}
+    //            onClick={_evt => onSubmit()}
+    //            disabled={List.length(state.listSelected) == 0}>
+    //            {ReasonReact.string("Add Updates")}
+    //          </button>
+    //        </div>
+    //      </div>
+    //    | None => <p> {ReasonReact.string("No Data")} </p>
+    //    }
+    //  }}
+  />;
 };

@@ -40,9 +40,7 @@ let client =
 
 ReactDOMRe.renderToElementWithId(
   <ReasonApollo.Provider client>
-    <ReasonApolloHooks.ApolloProvider client>
-      <App />
-    </ReasonApolloHooks.ApolloProvider>
+    <ApolloHooks.Provider client> <App /> </ApolloHooks.Provider>
   </ReasonApollo.Provider>,
   "app",
 );
