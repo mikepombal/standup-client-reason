@@ -140,13 +140,15 @@ let make = () => {
   //     {ReasonReact.string("Login")}
   //   </button>
   // </p>;
+  let buttonStyle = Classes.button();
+
   <div className={Classes.mainContainer()}>
     {switch (simple) {
      | Data(data) =>
        <div className={Classes.loginContainer()} action={data##githubLoginUrl}>
          {ReasonReact.string("Please login using your GitHub account")}
          <a href={data##githubLoginUrl}>
-           <button className={Classes.button()}>
+           <button className=buttonStyle>
              {ReasonReact.string("Sign In With GitHub")}
              <img
                className={Classes.githubImage()}
