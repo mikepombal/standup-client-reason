@@ -20,9 +20,20 @@ let make = () => {
 
   GlobalCss.injectGlobal();
   DesignSystem.Styles.useToggleBodyTheme();
+  let url = ReasonReactRouter.useUrl();
 
   <ThemeContext.Provider value=(theme, toggleTheme)>
     <Header />
-    {isLogin ? <PeopleList /> : <Login />}
+    {switch (url.path |> Route.fromUrl, isLogin) {
+     | (GitHubCode, false) =>
+       <div>
+         {React.string(
+            "Git Hub code:" ++ Js.String.split("=", url.search)[1],
+          )}
+       </div>
+     | (_, false) => <Login />
+     | (PeopleList, true) => <PeopleList />
+     | _ => <div> {React.string("Not found!")} </div>
+     }}
   </ThemeContext.Provider>;
 };
