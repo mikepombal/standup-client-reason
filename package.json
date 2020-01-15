@@ -8,7 +8,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "webpack": "webpack -w",
     "webpack:production": "NODE_ENV=production webpack",
-    "server": "webpack-dev-server",
+    "server": "webpack-dev-server --host localhost --port 5000",
     "get-schema": "node_modules/.bin/send-introspection-query https://standup-server.herokuapp.com/",
     "now": "now --name standup-client-reason deploy ./build",
     "dedupe:react": "npm dedupe reason-react --no-package-lock",
