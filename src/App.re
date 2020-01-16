@@ -25,12 +25,7 @@ let make = () => {
   <ThemeContext.Provider value=(theme, toggleTheme)>
     <Header />
     {switch (url.path |> Route.fromUrl, isLogin) {
-     | (GitHubCode, false) =>
-       <div>
-         {React.string(
-            "Git Hub code:" ++ Js.String.split("=", url.search)[1],
-          )}
-       </div>
+     | (GitHubCode, false) => <GitHubAuth querystring={url.search} />
      | (_, false) => <Login />
      | (PeopleList, true) => <PeopleList />
      | _ => <div> {React.string("Not found!")} </div>
