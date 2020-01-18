@@ -53,8 +53,14 @@ let make = (~querystring) => {
              | Loading
              | Called
              | Error(_) => ()
-             | Data(data) => Js.log(data)
+             | Data(data) =>
+               Storage.saveTokenToStorage(data##authorizeWithGithub##token);
+               Storage.saveUserToStorage(data##authorizeWithGithub##user);
              };
+             Js.Promise.resolve();
+           })
+        |> Js.Promise.catch(_error => {
+             Js.log("Something wrong");
              Js.Promise.resolve();
            })
         |> ignore;
