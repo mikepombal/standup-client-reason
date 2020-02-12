@@ -54,8 +54,8 @@ let make = (~querystring) => {
              | Called
              | Error(_) => ()
              | Data(data) =>
-               Storage.saveTokenToStorage(data##authorizeWithGithub##token);
-               Storage.saveUserToStorage(data##authorizeWithGithub##user);
+               Storage.saveUserToStorage(data##authorizeWithGithub);
+               Route.push(PeopleList);
              };
              Js.Promise.resolve();
            })

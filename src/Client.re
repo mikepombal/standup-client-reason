@@ -2,19 +2,22 @@ let inMemoryCache = ApolloInMemoryCache.createInMemoryCache();
 
 let authLink = {
   let authHandler = () => {
-    let token = Storage.getTokenFromStorage();
+    let username =
+      switch (Storage.getUsernameFromStorage()) {
+      | Some(t) => t
+      | None => ""
+      };
+    let authorization =
+      switch (Storage.getTokenFromStorage()) {
+      | Some(t) => {j|Bearer $t|j}
+      | None => ""
+      };
 
-    switch (token) {
-    | Some(t) => {
-        "headers": {
-          "Authorization": {j|Bearer $t|j},
-        },
-      }
-    | None => {
-        "headers": {
-          "Authorization": "",
-        },
-      }
+    {
+      "headers": {
+        "Authorization": authorization,
+        "Username": username,
+      },
     };
   };
 
