@@ -124,6 +124,7 @@ let make = () => {
   //      })
   //   |> ignore;
   // };
+  let buttonStyle = Classes.button();
   switch (full) {
   | {loading: true} => <p> {ReasonReact.string("Loading")} </p>
   | {data: Some(d)} =>
@@ -162,7 +163,7 @@ let make = () => {
           }
         />
         <button
-          className={Classes.button()}
+          className=buttonStyle
           // onClick={_evt => onSubmit()}
           disabled={List.length(state.listSelected) == 0}>
           {ReasonReact.string("Add Updates")}
