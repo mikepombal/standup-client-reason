@@ -32,9 +32,28 @@ let httpLink =
     (),
   );
 
+let errorLink =
+  ApolloLinks.createErrorLink(errorResponse => {
+    let messages =
+      errorResponse##graphQLErrors
+      ->Js.Nullable.toOption
+      ->Belt.Option.flatMap(error =>
+          Some(error |> Array.map(err => err##message))
+        );
+    let isTokenNotValid =
+      switch (messages) {
+      | Some(a) => Belt.Array.some(a, s => s == "Token not valid")
+      | _ => false
+      };
+    if (isTokenNotValid) {
+      Storage.removeTokenFromStorage();
+      Route.push(Login);
+    };
+  });
+
 let instance =
   ReasonApollo.createApolloClient(
-    ~link=ApolloLinks.from([|authLink, httpLink|]),
+    ~link=ApolloLinks.from([|authLink, errorLink, httpLink|]),
     ~cache=inMemoryCache,
     (),
   );

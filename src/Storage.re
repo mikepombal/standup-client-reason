@@ -12,3 +12,7 @@ let getTokenFromStorage = () => {
 let getUsernameFromStorage = () => {
   Dom.Storage.(localStorage |> getItem("username"));
 };
+
+let removeTokenFromStorage = () => {
+  Dom.Storage.(localStorage |> removeItem("token"));
+};
