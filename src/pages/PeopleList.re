@@ -73,15 +73,16 @@ module Classes = {
 [@react.component]
 let make = () => {
   let (_, full) = useQuery(LastUpdateQueryConfig.definition);
-  // let (addUpdates, _, _) =
-  //   AddUpdates.use(
-  //     ~refetchQueries=
-  //       _ => {
-  //         let query = LastUpdateQueryConfig.make();
-  //         [|ReasonApolloHooks.Utils.toQueryObj(query)|];
-  //       },
-  //     (),
-  //   );
+  let (addUpdates, _simple, _full) =
+    useMutation(
+      ~refetchQueries=
+        _ => {
+          let query = LastUpdateQueryConfig.make();
+          [|toQueryObj(query)|];
+        },
+      AddUpdatesMutationConfig.definition,
+    );
+
   let (state, dispatch) =
     React.useReducer(
       (state, action) =>
@@ -103,27 +104,21 @@ let make = () => {
         },
       initialState,
     );
-  // let onSubmit = () => {
-  //   let variables =
-  //     AddUpdatesMutationConfig.make(
-  //       ~date=state.date,
-  //       ~people=Array.of_list(state.listSelected),
-  //       (),
-  //     )##variables;
-  //   addUpdates(~variables, ())
-  //   |> Js.Promise.then_(
-  //        (
-  //          res:
-  //            ReasonApolloHooks.Mutation.controlledVariantResult(
-  //              AddUpdatesMutationConfig.t,
-  //            ),
-  //        ) => {
-  //        Js.log(res);
-  //        dispatch(ClearChecks);
-  //        Js.Promise.resolve();
-  //      })
-  //   |> ignore;
-  // };
+  let onSubmit = () => {
+    let variables =
+      AddUpdatesMutationConfig.make(
+        ~date=state.date,
+        ~people=Array.of_list(state.listSelected),
+        (),
+      )##variables;
+    addUpdates(~variables, ())
+    |> Js.Promise.then_(
+         (_res: Mutation.controlledVariantResult(AddUpdatesMutationConfig.t)) => {
+         dispatch(ClearChecks);
+         Js.Promise.resolve();
+       })
+    |> ignore;
+  };
   let buttonStyle = Classes.button();
   switch (full) {
   | {loading: true} => <p> {ReasonReact.string("Loading")} </p>
@@ -164,7 +159,7 @@ let make = () => {
         />
         <button
           className=buttonStyle
-          // onClick={_evt => onSubmit()}
+          onClick={_evt => onSubmit()}
           disabled={List.length(state.listSelected) == 0}>
           {ReasonReact.string("Add Updates")}
         </button>
