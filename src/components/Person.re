@@ -29,6 +29,8 @@ module Classes = {
     );
 };
 
+let totalMsInADay = 24. *. 3600. *. 1000.;
+
 [@react.component]
 let make = (~firstname, ~checked, ~lastUpdate, ~toggle) => {
   let days =
@@ -38,7 +40,7 @@ let make = (~firstname, ~checked, ~lastUpdate, ~toggle) => {
       let diff =
         Js_date.getTime(Js.Date.make())
         -. Js_date.getTime(Js.Date.fromString(date));
-      let numDays = Js.Math.floor(diff /. (24. *. 3660. *. 1000.));
+      let numDays = Js.Math.floor(diff /. totalMsInADay);
       switch (numDays) {
       | 0
       | 1 => string_of_int(numDays) ++ " day"
