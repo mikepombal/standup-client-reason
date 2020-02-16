@@ -27,8 +27,7 @@ let authLink = {
 /* Create an HTTP Link */
 let httpLink =
   ApolloLinks.createHttpLink(
-    // ~uri="https://standup-server.herokuapp.com/",
-    ~uri="http://localhost:4000",
+    ~uri="https://standup-server.herokuapp.com/",
     (),
   );
 

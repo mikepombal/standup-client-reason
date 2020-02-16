@@ -20,8 +20,6 @@ module AddUpdatesMutationConfig = [%graphql
 
 open ApolloHooks;
 
-// module AddUpdates = ReasonApolloHooks.Mutation.Make(AddUpdatesMutationConfig);
-
 type action =
   | TogglePerson(string)
   | ClearChecks

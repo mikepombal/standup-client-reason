@@ -36,7 +36,6 @@ let make = (~querystring) => {
       let code = getCode(querystring);
       switch (code) {
       | Some(code) =>
-        Js.log("There is a surprise: " ++ code);
         let variables =
           AuthorizeWithGithubMutation.make(~code, ())##variables;
 
@@ -65,7 +64,7 @@ let make = (~querystring) => {
            })
         |> ignore;
         ();
-      | None => Js.log("Oops not good")
+      | None => Js.log("Missing github code")
       };
       None;
     },

@@ -3,24 +3,6 @@ external src: string = "default";
 
 open ApolloHooks;
 
-// module LoginQuery = [%graphql
-//   {|
-//   mutation login($username: String!, $password: String!) {
-//     login(
-//         usrname: $username
-//         password: $password
-//     ) {
-//       token
-//       user {
-//         username
-//         firstname
-//         surname
-//       }
-//     }
-//   }
-// |}
-// ];
-
 module GithubLoginUrlQuery = [%graphql
   {|
   query GithubLoginUrl {
@@ -28,9 +10,6 @@ module GithubLoginUrlQuery = [%graphql
   }
 |}
 ];
-
-// module LoginMutation = ReasonApolloHooks.Mutation.Make(LoginQuery);
-// module GithubLoginUrl = ReasonApolloHooks.Query.Make(GithubLoginUrlQuery);
 
 type state = {
   username: string,
@@ -77,69 +56,7 @@ module Classes = {
 
 [@react.component]
 let make = () => {
-  // let (login, _, _) = useMutation(LoginMutation.use);
-
-  let (simple, _full) = useQuery(GithubLoginUrlQuery.definition); //GithubLoginUrl.use();
-  // let (state, dispatch) =
-  //   React.useReducer(
-  //     (state, action) =>
-  //       switch (action) {
-  //       | UpdateUsername(str) => {...state, username: str}
-  //       | UpdatePassword(str) => {...state, password: str}
-  //       },
-  //     {username: "", password: ""},
-  //   );
-
-  // let onSubmit = () => {
-  //   let variables =
-  //     LoginQuery.make(~username=state.username, ~password=state.password, ())##variables;
-  //   login(~variables, ())
-  //   |> Js.Promise.then_(
-  //        (
-  //          res:
-  //            ReasonApolloHooks.Mutation.controlledVariantResult(LoginQuery.t),
-  //        ) => {
-  //        switch (res) {
-  //        | NoData
-  //        | Loading
-  //        | Called
-  //        | Error(_) => ()
-  //        | Data(data) =>
-  //          Js.log("Some data!");
-  //          switch (data##login) {
-  //          | Some(login) =>
-  //            Storage.saveTokenToStorage(login##token);
-  //            Storage.saveUserToStorage(login##user);
-  //            setLogin(_ => true);
-  //          | None => ()
-  //          };
-  //        };
-
-  //        Js.Promise.resolve();
-  //      })
-  //   |> ignore;
-  // };
-
-  // <p>
-  //   <input
-  //     placeholder="Username"
-  //     value={state.username}
-  //     onChange={evt =>
-  //       dispatch(UpdateUsername(ReactEvent.Form.target(evt)##value))
-  //     }
-  //   />
-  //   <input
-  //     type_="password"
-  //     placeholder="Password"
-  //     value={state.password}
-  //     onChange={evt =>
-  //       dispatch(UpdatePassword(ReactEvent.Form.target(evt)##value))
-  //     }
-  //   />
-  //   <button onClick={_evt => onSubmit()}>
-  //     {ReasonReact.string("Login")}
-  //   </button>
-  // </p>;
+  let (simple, _full) = useQuery(GithubLoginUrlQuery.definition);
   let buttonStyle = Classes.button();
 
   <div className={Classes.mainContainer()}>
