@@ -149,21 +149,25 @@ let make = () => {
            ),
          )}
       </ul>
-      <div className={Classes.time()}>
-        <input
-          type_="date"
-          value={state.date}
-          onChange={evt =>
-            dispatch(SetDate(ReactEvent.Form.target(evt)##value))
-          }
-        />
-        <button
-          className=buttonStyle
-          onClick={_evt => onSubmit()}
-          disabled={List.length(state.listSelected) == 0}>
-          {ReasonReact.string("Add Updates")}
-        </button>
-      </div>
+      {switch (Storage.getRoleFromStorage()) {
+       | Some("admin") =>
+         <div className={Classes.time()}>
+           <input
+             type_="date"
+             value={state.date}
+             onChange={evt =>
+               dispatch(SetDate(ReactEvent.Form.target(evt)##value))
+             }
+           />
+           <button
+             className=buttonStyle
+             onClick={_evt => onSubmit()}
+             disabled={List.length(state.listSelected) == 0}>
+             {ReasonReact.string("Add Updates")}
+           </button>
+         </div>
+       | _ => ReasonReact.null
+       }}
     </div>
   | {error: Some(_)} => <p> {ReasonReact.string("Error!")} </p>
   | _ => <p> {ReasonReact.string("Unexpected")} </p>
