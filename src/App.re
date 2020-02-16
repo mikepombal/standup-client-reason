@@ -1,14 +1,5 @@
 [@react.component]
 let make = () => {
-  let (isLogin, setLogin) =
-    React.useState(() => {
-      let token = Storage.getTokenFromStorage();
-
-      switch (token) {
-      | Some(_t) => true
-      | None => false
-      };
-    });
   let (theme, setTheme) = React.useState(() => ThemeContext.Dark);
   let toggleTheme = () =>
     setTheme(current =>
@@ -20,9 +11,15 @@ let make = () => {
 
   GlobalCss.injectGlobal();
   DesignSystem.Styles.useToggleBodyTheme();
+  let url = ReasonReactRouter.useUrl();
 
   <ThemeContext.Provider value=(theme, toggleTheme)>
     <Header />
-    {isLogin ? <PeopleList /> : <Login setLogin />}
+    {switch (url.path |> Route.fromUrl, Storage.getTokenFromStorage()) {
+     | (GitHubCode, _) => <GitHubAuth querystring={url.search} />
+     | (_, None) => <Login />
+     | (PeopleList, Some(_)) => <PeopleList />
+     | _ => <div> {React.string("Not found!")} </div>
+     }}
   </ThemeContext.Provider>;
 };

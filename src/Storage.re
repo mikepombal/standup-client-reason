@@ -1,21 +1,29 @@
-let saveTokenToStorage = value => {
-  Dom.Storage.(localStorage |> setItem("jwt", value));
+let saveUserToStorage = authorizeWithGithub => {
+  let role =
+    switch (authorizeWithGithub##user##role) {
+    | `SUPERADMIN
+    | `ADMIN => "admin"
+    | _ => "basic"
+    };
+  open Dom.Storage;
+  localStorage |> setItem("username", authorizeWithGithub##user##username);
+  localStorage |> setItem("firstname", authorizeWithGithub##user##firstname);
+  localStorage |> setItem("role", role);
+  localStorage |> setItem("token", authorizeWithGithub##token);
 };
 
 let getTokenFromStorage = () => {
-  Dom.Storage.(localStorage |> getItem("jwt"));
+  Dom.Storage.(localStorage |> getItem("token"));
 };
 
-let saveUserToStorage = user => {
-  open Dom.Storage;
-  localStorage |> setItem("username", user##username);
-  localStorage |> setItem("firstname", user##firstname);
+let getUsernameFromStorage = () => {
+  Dom.Storage.(localStorage |> getItem("username"));
 };
 
-let getUserFromStorage = () => {
-  (
-    Dom.Storage.(localStorage |> getItem("username")),
-    Dom.Storage.(localStorage |> getItem("bio")),
-    Dom.Storage.(localStorage |> getItem("image")),
-  );
+let getRoleFromStorage = () => {
+  Dom.Storage.(localStorage |> getItem("role"));
+};
+
+let removeTokenFromStorage = () => {
+  Dom.Storage.(localStorage |> removeItem("token"));
 };
